@@ -1,0 +1,145 @@
+# Student Grade Tracker System
+
+import os
+import re
+
+# Define a dictionary to store student information
+students = {}
+
+def clear_screen():
+    os.system('cls' if os.name == 'nt' else 'clear')
+
+def add_student():
+    clear_screen()
+    while True:
+        name = input("Enter student name: ")
+        if re.match("^[a-zA-Z ]+$", name):
+            break
+        else:
+            print("Invalid input. Please enter a valid name.")
+    marks = {}
+    for subject in ["Math", "Science", "English", "History", "Geography"]:
+        while True:
+            mark = input(f"Enter {subject} mark (0-100): ")
+            if mark.isdigit() and 0 <= int(mark) <= 100:
+                marks[subject] = int(mark)
+                break
+            else:
+                print("Invalid input. Please enter a mark between 0 and 100.")
+    students[name] = marks
+    print(f"Student {name} added successfully!")
+    input("Press Enter to continue...")
+    clear_screen()
+
+def view_students():
+    clear_screen()
+    print("Student List:")
+    for name, marks in students.items():
+        print(f"{name}:")
+        for subject, mark in marks.items():
+            print(f"  {subject}: {mark}")
+        average = sum(marks.values()) / len(marks)
+        print(f"  Average: {average:.2f}")
+    input("Press Enter to continue...")
+    clear_screen()
+
+def view_student_marks():
+    clear_screen()
+    while True:
+        name = input("Enter student name: ")
+        if re.match("^[a-zA-Z ]+$", name):
+            break
+        else:
+            print("Invalid input. Please enter a valid name.")
+    if name in students:
+        print(f"Marks for {name}:")
+        for subject, mark in students[name].items():
+            print(f"  {subject}: {mark}")
+        average = sum(students[name].values()) / len(students[name])
+        print(f"  Average: {average:.2f}")
+    else:
+        print("Student not found!")
+    input("Press Enter to continue...")
+    clear_screen()
+
+def update_marks():
+    clear_screen()
+    while True:
+        name = input("Enter student name: ")
+        if re.match("^[a-zA-Z ]+$", name):
+            break
+        else:
+            print("Invalid input. Please enter a valid name.")
+    if name in students:
+        print("Select a subject to update:")
+        for i, subject in enumerate(students[name].keys(), 1):
+            print(f"{i}. {subject} - Current mark: {students[name][subject]}")
+        while True:
+            choice = input("Enter your choice: ")
+            if choice.isdigit() and 1 <= int(choice) <= len(students[name]):
+                break
+            else:
+                print("Invalid input. Please enter a number between 1 and", len(students[name]))
+        subject = list(students[name].keys())[int(choice) - 1]
+        print(f"Current mark for {subject}: {students[name][subject]}")
+        while True:
+            new_mark = input(f"Enter new {subject} mark (0-100): ")
+            if new_mark.isdigit() and 0 <= int(new_mark) <= 100:
+                students[name][subject] = int(new_mark)
+                break
+            else:
+                print("Invalid input. Please enter a mark between 0 and 100.")
+        print(f"Mark for {subject} updated successfully for {name}!")
+    else:
+        print("Student not found!")
+    input("Press Enter to continue...")
+    clear_screen()
+
+def delete_student():
+    clear_screen()
+    while True:
+        name = input("Enter student name: ")
+        if re.match("^[a-zA-Z ]+$", name):
+            break
+        else:
+            print("Invalid input. Please enter a valid name.")
+    if name in students:
+        del students[name]
+        print(f"Student {name} deleted successfully!")
+    else:
+        print("Student not found!")
+    input("Press Enter to continue...")
+    clear_screen()
+
+def main():
+    while True:
+        clear_screen()
+        print("\nStudent Grade Tracker System")
+        print("1. Add Student")
+        print("2. View Students")
+        print("3. View Student Marks")
+        print("4. Update Marks")
+        print("5. Delete Student")
+        print("6. Quit")
+        while True:
+            choice = input("Enter your choice: ")
+            if choice.isdigit() and 1 <= int(choice) <= 6:
+                break
+            else:
+                print("Invalid input. Please enter a number between 1 and 6.")
+        if choice == "1":
+            add_student()
+        elif choice == "2":
+            view_students()
+        elif choice == "3":
+            view_student_marks()
+        elif choice == "4":
+            update_marks()
+        elif choice == "5":
+            delete_student()
+        elif choice == "6":
+            print("Goodbye!")
+            break
+
+if __name__ == "__main__":
+    main()
